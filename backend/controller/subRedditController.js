@@ -62,6 +62,11 @@ export async function handleJoin(req,res) {
             {new: true}
         )
         if(sub){
+            const userUpdated = await userModel.findOneAndUpdate(
+            {_id:loggedId},
+            {$pull: {joinedSub: subId}},
+            {new: true}
+        )
             return res.status(200).json({ message: "Unfollowed successfully", sub });
         }
         else{
@@ -70,6 +75,15 @@ export async function handleJoin(req,res) {
                 {$addToSet: {followers: loggedId}},
                 {new: true}
         )
+        if (!sub) {
+            return res.status(404).json({ message: "Subreddit not found" });
+        }
+            const userUpdate = await userModel.findByIdAndUpdate(
+                loggedId,
+                {$addToSet: {joinedSub: subId}},
+                {new: true}
+        )
+        console.log(userUpdate.joinedSub);
         return res.status(200).json({message: "Followed successfully", sub})
         }
     } catch (error) {   
@@ -85,6 +99,8 @@ export async function getFollowers(req,res) {
             path: 'joinedSub',
             select: 'name'
         })
+        console.log(subs);
+        console.log(subs.joinedSub);
         res.status(200).json({followingSubs: subs.joinedSub})
     } catch (error) {
         res.status(500).json({message: "server error for getting following subs"})

@@ -5,13 +5,33 @@ import { Outlet } from 'react-router'
 import { useState ,useEffect} from 'react'
 import axios from 'axios'
 import SidebarItem from './SidebarItem'
+import { useNavigate } from 'react-router'
 
 function Layout() {
     const serverUrl = 'http://localhost:3000/'
 
+    const nav = useNavigate() 
     const [yourCommunities, setYourCommunities] = useState([])
     const [followingCommunities, setFollowingCommunities] = useState([])
 
+    const verifyUser = async() => {
+        const url = `${serverUrl}api/verify`
+        const token = localStorage.getItem('token')
+        if(!token){
+            nav('/login')
+        }
+        try {
+            const isLogged = await axios.get(url,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+        } catch (error) {
+            localStorage.removeItem('token')
+            nav('login')
+        }
+    }
      const getYourCommunities = async () => {
 
         try {
@@ -30,7 +50,7 @@ function Layout() {
             console.error(error)
         }
     }
-    const getFollowingComunities = async () => {
+    const getFollowingCommunities = async () => {
 
         try {
             const url = `${serverUrl}api/subreddit/following`
@@ -40,17 +60,20 @@ function Layout() {
                     Authorization: `Bearer ${token}`,
                 }
             })
-            
-            if (followingCommunities) {
-                setFollowingCommunities(followingCommunities.data.followingSubs)
+            console.log(followingSubs);
+            console.log(followingSubs.data);
+
+            if (followingSubs) {
+                setFollowingCommunities(followingSubs.data.followingSubs)
             }
         } catch (error) {
             console.error(error)
         }
     }
     useEffect(() => {
+        verifyUser()
         getYourCommunities()
-        getFollowingComunities()
+        getFollowingCommunities()
     }, [])
 
     return (
@@ -61,8 +84,8 @@ function Layout() {
                     yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
                     followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
                 />
-                <Outlet/>
-            </div>
+                <Outlet context={{getFollowingCommunities}}/>
+            </div>s
         </div>
     )
 }

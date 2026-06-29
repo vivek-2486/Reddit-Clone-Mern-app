@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import logo from '../assets/icon-reddit.png'
 import {jwtDecode} from 'jwt-decode'
+import { useOutletContext } from 'react-router';
 
 function ShowCommunity() {
   const {name} = useParams();
   const serverUrl = 'http://localhost:3000/'
-  
+  const {getFollowingCommunities} = useOutletContext()
   const [followers,setFollowers] = useState(0)
   useEffect(() => {
     getCommunity()
@@ -34,9 +35,7 @@ function ShowCommunity() {
         loggedId = decoded.id
       }
       const isMember = comm.data.followers.includes(loggedId)
-      if(isMember){
-        setJoin(true)
-      }
+      setJoin(isMember)
       setAbout(comm.data.description)
       console.log(comm.data.followers.length)
       setFollowers(comm.data.followers.length)
@@ -57,6 +56,7 @@ function ShowCommunity() {
         }
       })
       setFollowers(res.data.sub.followers.length)
+      getFollowingCommunities()
     } catch (error) {
       console.log(error)
     }

@@ -4,7 +4,8 @@ import connectDb from './db.js'
 import userRoutes from './routes/userRoutes.js'
 import subRedditRoutes from './routes/subRedditRoutes.js'
 import postRoutes from './routes/postRoutes.js'
-import searchRoutes from './routes/searchRutes.js'
+import searchRoutes from './routes/searchRoutes.js'
+import verifyRoutes from './routes/verifyRoutes.js'
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +24,8 @@ app.use('/api/user',userRoutes);
 app.use('/api/subreddit',subRedditRoutes);
 app.use('/api/post',postRoutes);
 app.use('/api/search',searchRoutes)
+
+app.use('/api/verify',verifyRoutes)
 
 app.listen(port,()=>{
     console.log('App is listening at ',port);
