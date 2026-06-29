@@ -9,10 +9,10 @@ const subRedditSchema =new mongoose.Schema({
         type: String,
         required: true,
     },
-    followers:{
-        type: Number,
-        default: 0
-    },
+    followers:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User' 
+    }],
     description:{
         type: String,
         required: true

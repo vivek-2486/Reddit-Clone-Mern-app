@@ -3,7 +3,7 @@ import { ChevronLast, ChevronFirst ,BadgePlus,BookUser,Users} from 'lucide-react
 import Modal from './Modal'
 import { useNavigate } from 'react-router'
 
-function Sidebar({children , onCommunityCreated}) {
+function Sidebar({yourCommunities ,followingCommunities, onCommunityCreated}) {
 	const nav = useNavigate()
 	const [expanded, setExpanded] = useState(true)
 	return (
@@ -19,12 +19,13 @@ function Sidebar({children , onCommunityCreated}) {
 					<div className={`${expanded? "mr-2 ": "w-0 overflow-hidden"}`}>Your Communities</div>
 					<div><BookUser/></div>
 				</div>
-				<div>{expanded && children}</div>
+				<div>{expanded && yourCommunities}</div>
 				<hr/>
 				<div className='cursor-pointer m-1 flex gap-1 justify-between h-[24px] my-2 '>
 					<div className={`${expanded? "mr-2 ": "w-0 overflow-hidden"}`}>Following Communitites</div>
 					<div><Users/></div>
 				</div>
+				<div>{expanded && followingCommunities}</div>
 			</nav>
 		</aside>
 	)

@@ -13,10 +13,14 @@ const userSchema =new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    joinedSub: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'subReddit'
+    }]
 },{
     timestamps: true
 })
 
-const user = mongoose.model("user",userSchema);
-export default user;
+const userModel = mongoose.model("user",userSchema);
+export default userModel;

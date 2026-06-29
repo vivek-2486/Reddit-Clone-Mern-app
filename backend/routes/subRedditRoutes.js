@@ -9,6 +9,7 @@ const router = Router();
 router.post('/',auth,subRedditController.createSub)
 router.get('/',auth,subRedditController.getSub);
 router.get('/:id',auth,subRedditController.getRequestedSub)
-
+router.get('/:id/join',auth,subRedditController.handleJoin)
+router.get('/following',auth,subRedditController.getFollowers)
 
 export default router;

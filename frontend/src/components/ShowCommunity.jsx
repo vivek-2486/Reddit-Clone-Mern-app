@@ -2,17 +2,20 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import logo from '../assets/icon-reddit.png'
+import {jwtDecode} from 'jwt-decode'
 
 function ShowCommunity() {
   const {name} = useParams();
   const serverUrl = 'http://localhost:3000/'
   
+  const [followers,setFollowers] = useState(0)
   useEffect(() => {
     getCommunity()
     
-  }, [name])
+  }, [name,followers])
   const [about,setAbout] = useState("")
-  const [followers,setFollowers] = useState(0)
+  
+  const [subId,setSubId] = useState("")
 
   const getCommunity = async() => {
     try {
@@ -23,14 +26,41 @@ function ShowCommunity() {
           Authorization: `Bearer ${token}`
         }
       })
+      setSubId(comm.data._id)
+      
+      let loggedId = ""
+      if(token){
+        const decoded = jwtDecode(token)
+        loggedId = decoded.id
+      }
+      const isMember = comm.data.followers.includes(loggedId)
+      if(isMember){
+        setJoin(true)
+      }
       setAbout(comm.data.description)
-      setFollowers(comm.data.followers)
+      console.log(comm.data.followers.length)
+      setFollowers(comm.data.followers.length)
       console.log(comm)
     } catch (error) {
       console.error(error)
     }
   }
-
+  const [join,setJoin] = useState(false)
+  const handleJoin = async() => {
+    setJoin(!join)
+    try {
+      const token = localStorage.getItem('token')
+      const url = `${serverUrl}api/subreddit/${subId}/join`
+      const res = await axios.get(url,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      setFollowers(res.data.sub.followers.length)
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className='w-full m-3.5'>
       <header className='flex justify-between m-2 p-2 items-center'>
@@ -39,7 +69,7 @@ function ShowCommunity() {
           <span className='text-5xl'>r/ {name}</span>
         </div>
         <div>
-          <button className='border border-neutral-600 rounded-2xl p-2 m-2'>Follow </button>
+          <button className='border border-neutral-600 rounded-2xl p-2 m-2' onClick={handleJoin}>{join? <span>Joined</span>:<span>Join</span>}</button>
           <button className='border border-neutral-600 rounded-2xl p-2 m-2'>+ Create Post </button>
           <span>Followers : </span>
           <span>{followers}</span>

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import subRedditModel from "../models/subRedditModel.js";
-
+import userModel from '../models/userModel.js'
 export async function createSub(req,res) {
     try {
         const {name,description} = req.body
@@ -10,7 +10,7 @@ export async function createSub(req,res) {
         const subReddit = await subRedditModel.create({
             name,
             creator: req.user.id,
-            followers: 0,
+            followers: [],
             description
         })
 
@@ -39,7 +39,6 @@ export async function getRequestedSub(req,res){
         const loggedId = req.user.id;
 
         const sub = await subRedditModel.findOne({
-            creator: loggedId,
             name: subName
         })
 
@@ -48,5 +47,46 @@ export async function getRequestedSub(req,res){
     } catch (error) {
         console.error(error)
         res.status(500).json({message: "Error occur from server side"});
+    }
+}
+
+export async function handleJoin(req,res) {
+    try {
+        const loggedId = req.user.id
+        const subId = req.params.id
+
+        
+        const sub = await subRedditModel.findOneAndUpdate(
+            {_id:subId, followers: loggedId},
+            {$pull: {followers: loggedId}},
+            {new: true}
+        )
+        if(sub){
+            return res.status(200).json({ message: "Unfollowed successfully", sub });
+        }
+        else{
+            const sub = await subRedditModel.findByIdAndUpdate(
+                subId,
+                {$addToSet: {followers: loggedId}},
+                {new: true}
+        )
+        return res.status(200).json({message: "Followed successfully", sub})
+        }
+    } catch (error) {   
+        console.error(error)
+        res.status(500).json({message: "Error in handleJoin"})
+    }
+}
+
+export async function getFollowers(req,res) {
+    try {
+        const loggedId = req.user.id
+        const subs = await userModel.findById(loggedId).populate({
+            path: 'joinedSub',
+            select: 'name'
+        })
+        res.status(200).json({followingSubs: subs.joinedSub})
+    } catch (error) {
+        res.status(500).json({message: "server error for getting following subs"})
     }
 }

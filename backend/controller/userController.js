@@ -34,7 +34,8 @@ export async function addUser(req,res){
         const user = await userModal.create({
             username,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+            joinedSub: []
         })
 
         console.log(config.jsonwebtoken);
@@ -87,7 +88,7 @@ export async function login(req,res){
         return res.status(200).json({
             message: "Login successful!",
             token: token,
-            user: { id: user._id, name: user.username, email: user.email } 
+            user: { id: user._id, name: user.username, email: user.email ,joinedSub: user.joinedSub} 
         });
 
     } catch (error) {

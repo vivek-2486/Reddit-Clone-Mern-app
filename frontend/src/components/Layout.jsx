@@ -10,8 +10,9 @@ function Layout() {
     const serverUrl = 'http://localhost:3000/'
 
     const [yourCommunities, setYourCommunities] = useState([])
+    const [followingCommunities, setFollowingCommunities] = useState([])
 
-    const getYourCommunities = async () => {
+     const getYourCommunities = async () => {
 
         try {
             const url = `${serverUrl}api/subreddit`
@@ -29,17 +30,37 @@ function Layout() {
             console.error(error)
         }
     }
+    const getFollowingComunities = async () => {
+
+        try {
+            const url = `${serverUrl}api/subreddit/following`
+            const token = localStorage.getItem('token');
+            const followingSubs = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+            
+            if (followingCommunities) {
+                setFollowingCommunities(followingCommunities.data.followingSubs)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
     useEffect(() => {
         getYourCommunities()
+        getFollowingComunities()
     }, [])
 
     return (
         <div>
             <Navbar />
             <div className='flex'>
-                <Sidebar onCommunityCreated={getYourCommunities}>
-                    {yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
-                </Sidebar>
+                <Sidebar onCommunityCreated={getYourCommunities} 
+                    yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
+                    followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
+                />
                 <Outlet/>
             </div>
         </div>
