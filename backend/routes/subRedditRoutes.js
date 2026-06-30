@@ -10,6 +10,7 @@ router.post('/',auth,subRedditController.createSub)
 router.get('/',auth,subRedditController.getSub);
 router.get('/following',auth,subRedditController.getFollowers)
 router.get('/:id',auth,subRedditController.getRequestedSub)
+router.delete('/:id/delete',auth,subRedditController.deleteSub)
 router.get('/:id/join',auth,subRedditController.handleJoin)
 
 export default router;

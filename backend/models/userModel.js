@@ -16,7 +16,7 @@ const userSchema =new mongoose.Schema({
     },
     joinedSub: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'subReddit'
+        ref: 'subreddit'
     }]
 },{
     timestamps: true

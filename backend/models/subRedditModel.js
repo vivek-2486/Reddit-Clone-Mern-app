@@ -11,7 +11,7 @@ const subRedditSchema =new mongoose.Schema({
     },
     followers:[{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User' 
+        ref: 'user' 
     }],
     description:{
         type: String,
@@ -21,5 +21,5 @@ const subRedditSchema =new mongoose.Schema({
     timestamps: true
 })
 
-const subRedditModel = mongoose.model("subReddit",subRedditSchema);
+const subRedditModel = mongoose.model("subreddit",subRedditSchema);
 export default subRedditModel;

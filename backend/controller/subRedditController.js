@@ -41,7 +41,11 @@ export async function getRequestedSub(req,res){
         const sub = await subRedditModel.findOne({
             name: subName
         })
-
+        if (!sub) {
+        return res.status(404).json({
+            message: "Community not found",
+        });
+}
         console.log(sub)
         res.status(200).json(sub)
     } catch (error) {
@@ -103,6 +107,32 @@ export async function getFollowers(req,res) {
         console.log(subs.joinedSub);
         res.status(200).json({followingSubs: subs.joinedSub})
     } catch (error) {
+        console.error(error)
         res.status(500).json({message: "server error for getting following subs"})
+    }
+}
+
+export async function deleteSub(req,res){
+
+    try {
+        const subName = req.params.id
+        const loggedId = req.user.id
+
+        const sub = await subRedditModel.findOneAndDelete({
+            name : subName
+        });
+        await userModel.updateMany(
+            {},
+            {
+                $pull: {
+                    joinedSub: sub._id
+                }
+            }
+        )
+
+        res.status(200).json({message: "deletes successfully"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "error in deleting"})
     }
 }

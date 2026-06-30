@@ -27,6 +27,7 @@ app.use('/api/search',searchRoutes)
 
 app.use('/api/verify',verifyRoutes)
 
+app.use('/post',postRoutes)
 app.listen(port,()=>{
     console.log('App is listening at ',port);
 })

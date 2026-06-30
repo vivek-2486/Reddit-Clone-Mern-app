@@ -1,15 +1,18 @@
 import React from 'react'
-import Navbar from './Navbar'
-import Sidebar from './Sidebar'
+import Navbar from '../components/Navbar'
+import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router'
 import { useState ,useEffect} from 'react'
 import axios from 'axios'
-import SidebarItem from './SidebarItem'
+import SidebarItem from '../components/SidebarItem'
 import { useNavigate } from 'react-router'
+import { useAuth } from '@/context/AuthContext'
+
 
 function Layout() {
     const serverUrl = 'http://localhost:3000/'
 
+    const {user, setUser} = useAuth()
     const nav = useNavigate() 
     const [yourCommunities, setYourCommunities] = useState([])
     const [followingCommunities, setFollowingCommunities] = useState([])
@@ -26,7 +29,7 @@ function Layout() {
                 Authorization: `Bearer ${token}`
             }
         })
-
+        setUser(isLogged.data.userData)
         } catch (error) {
             localStorage.removeItem('token')
             nav('login')
@@ -84,8 +87,8 @@ function Layout() {
                     yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
                     followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
                 />
-                <Outlet context={{getFollowingCommunities}}/>
-            </div>s
+                <Outlet context={{getFollowingCommunities,getYourCommunities}}/>
+            </div>
         </div>
     )
 }

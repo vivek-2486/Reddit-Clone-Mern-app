@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import ShowCommunity from './ShowCommunity'
+import ShowCommunity from '../pages/ShowCommunity'
 import { useNavigate } from 'react-router'
 
 function SidebarItem({id,name}) {

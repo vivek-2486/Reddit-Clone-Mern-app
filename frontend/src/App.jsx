@@ -3,11 +3,12 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Start from './pages/Start'
-
+import { AuthProvider } from './context/AuthContext'
 import {createBrowserRouter,RouterProvider} from 'react-router'
-import Layout from './components/Layout'
-import ShowCommunity from './components/ShowCommunity'
+import Layout from './pages/Layout'
+import ShowCommunity from './pages/ShowCommunity'
 import SearchResult from './pages/SearchResult'
+import ShowPost from './pages/ShowPost'
 
 function App() {
 
@@ -36,6 +37,10 @@ function App() {
           element: <ShowCommunity/>
         },
         {
+          path: '/p/:id',
+          element: <ShowPost/>
+        },
+        {
           path: '/search',
           element: <SearchResult/>
         }
@@ -45,9 +50,9 @@ function App() {
   ])
 
   return (
-  <>
+  <AuthProvider>
     <RouterProvider router={router} />
-  </>
+  </AuthProvider>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ChevronLast, ChevronFirst ,BadgePlus,BookUser,Users} from 'lucide-react'
-import Modal from './Modal'
+import Modal from './CreateCommunityModal'
 import { useNavigate } from 'react-router'
 
 function Sidebar({yourCommunities ,followingCommunities, onCommunityCreated}) {
