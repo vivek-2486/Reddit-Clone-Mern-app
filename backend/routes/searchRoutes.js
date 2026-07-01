@@ -22,11 +22,11 @@ const getSearchResults = async(req,res) =>{
             postModel.find({
                 $or:[
                     {title: {$regex:q, $options:'i'}},
-                    {description: {$regex:q, $options:'i'}}
+                    {content: {$regex:q, $options:'i'}}
                 ]
-            })
-            .select('title _id subReddit createdAt')
-            .populate('subReddit')
+            }).populate("creator")
+            .select('title _id subreddit content createdAt creator')
+            .populate('subreddit')
             .limit(5)
 
         ])
