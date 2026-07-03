@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import { Outlet } from 'react-router'
-import { useState ,useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import SidebarItem from '../components/SidebarItem'
 import { useNavigate } from 'react-router'
@@ -12,30 +12,30 @@ import { useAuth } from '@/context/AuthContext'
 function Layout() {
     const serverUrl = 'http://localhost:3000/'
 
-    const {user, setUser} = useAuth()
-    const nav = useNavigate() 
+    const { user, setUser } = useAuth()
+    const nav = useNavigate()
     const [yourCommunities, setYourCommunities] = useState([])
     const [followingCommunities, setFollowingCommunities] = useState([])
 
-    const verifyUser = async() => {
+    const verifyUser = async () => {
         const url = `${serverUrl}api/verify`
         const token = localStorage.getItem('token')
-        if(!token){
+        if (!token) {
             nav('/login')
         }
         try {
-            const isLogged = await axios.get(url,{
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        setUser(isLogged.data.userData)
+            const isLogged = await axios.get(url, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setUser(isLogged.data.userData)
         } catch (error) {
             localStorage.removeItem('token')
             nav('login')
         }
     }
-     const getYourCommunities = async () => {
+    const getYourCommunities = async () => {
 
         try {
             const url = `${serverUrl}api/subreddit`
@@ -79,15 +79,21 @@ function Layout() {
         getFollowingCommunities()
     }, [])
 
+    const [expanded, setExpanded] = useState(true)
     return (
-        <div>
+        <div className = "">
+            <div className=''>
             <Navbar />
+
+            </div>
             <div className='flex'>
-                <Sidebar onCommunityCreated={getYourCommunities} 
-                    yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
-                    followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id= {comm._id} name={comm.name} />))}
+                <Sidebar onCommunityCreated={getYourCommunities} expanded= {expanded} setExpanded={setExpanded}
+                    yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} />))}
+                    followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} />))}
                 />
-                <Outlet context={{getFollowingCommunities,getYourCommunities}}/>
+                <main className={` ${expanded? "ml-[250px]":"ml-[40px]"} pt-16 w-full`}>
+                    <Outlet context={{ getFollowingCommunities, getYourCommunities }} />
+                </main>
             </div>
         </div>
     )

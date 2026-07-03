@@ -26,7 +26,6 @@ export async function getSub(req,res){
         const loggedId = req.user.id
 
         const subReddits = await subRedditModel.find({creator : loggedId})
-        console.log(subReddits);
         res.status(200).json(subReddits)
     } catch (error) {
         console.error(error)
@@ -46,7 +45,7 @@ export async function getRequestedSub(req,res){
             message: "Community not found",
         });
 }
-        console.log(sub)
+
         res.status(200).json(sub)
     } catch (error) {
         console.error(error)
@@ -87,7 +86,7 @@ export async function handleJoin(req,res) {
                 {$addToSet: {joinedSub: subId}},
                 {new: true}
         )
-        console.log(userUpdate.joinedSub);
+
         return res.status(200).json({message: "Followed successfully", sub})
         }
     } catch (error) {   
@@ -103,8 +102,7 @@ export async function getFollowers(req,res) {
             path: 'joinedSub',
             select: 'name'
         })
-        console.log(subs);
-        console.log(subs.joinedSub);
+
         res.status(200).json({followingSubs: subs.joinedSub})
     } catch (error) {
         console.error(error)

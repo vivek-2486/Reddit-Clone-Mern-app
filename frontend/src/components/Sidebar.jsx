@@ -3,11 +3,10 @@ import { ChevronLast, ChevronFirst ,BadgePlus,BookUser,Users} from 'lucide-react
 import Modal from './CreateCommunityModal'
 import { useNavigate } from 'react-router'
 
-function Sidebar({yourCommunities ,followingCommunities, onCommunityCreated}) {
+function Sidebar({yourCommunities ,followingCommunities, onCommunityCreated,expanded,setExpanded}) {
 	const nav = useNavigate()
-	const [expanded, setExpanded] = useState(true)
 	return (
-		<aside className='h-screen w-fit pr-0.5'>
+		<aside className={`pr-0.5 fixed top-16 left-0 h-screen ${expanded? "w-[250px]": "w-[40px]"}`}>
 			<nav className='bg-pink-300 h-full flex flex-col'>
 				<div className='flex gap-1 m-1 my-2 justify-between'>
 					<button className={`overflow-hidden transition-all  ${expanded ? "w-fit" : "w-0 display-none"} cursor-pointer`} onClick= {() => nav('/home')}>Home</button>

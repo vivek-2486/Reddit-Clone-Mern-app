@@ -8,6 +8,7 @@ const router = Router();
 
 
 router.post('/',auth,postController.createPost)
+router.get('/feed',auth,postController.getFeed)
 router.get('/singlePost/:id',auth,postController.getPost)
 router.get('/:id',auth,postController.getPosts)
 router.put('/:id/upVote',auth,postController.handleUpVote)

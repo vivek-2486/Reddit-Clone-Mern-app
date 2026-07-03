@@ -191,3 +191,17 @@ export async function handleDownVote(req, res) {
         });
     }
 }
+
+export async function getFeed(req,res){
+
+    try {
+        const {page,limit} = req.query;
+
+        const feed = await postModel.getRankedFeed(Number(page),Number(limit))
+        console.log(feed)
+        res.status(200).json({feed})
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Error from Server Side while fetching Feed"});
+    }
+}
