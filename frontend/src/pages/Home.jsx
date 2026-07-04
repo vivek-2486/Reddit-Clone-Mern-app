@@ -208,8 +208,8 @@ function Home() {
 
                 <button
                   className="hover:text-green-500 transition"
-                  onClick={(e) => e.stopPropagation()}
-                >
+                 
+                 >
                   💬 Comments
                 </button>
               </div>

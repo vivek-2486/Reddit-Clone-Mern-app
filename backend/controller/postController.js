@@ -198,7 +198,6 @@ export async function getFeed(req,res){
         const {page,limit} = req.query;
 
         const feed = await postModel.getRankedFeed(Number(page),Number(limit))
-        console.log(feed)
         res.status(200).json({feed})
     } catch (error) {
         console.error(error)
