@@ -10,7 +10,6 @@ function Home() {
 
   const [yourCommunities, setYourCommunities] = useState([]);
 
-  // Refs for tracking infinite scroll data states without causing re-renders
   const pageRef = useRef(1);
   const loadingRef = useRef(false);
   const hasMoreRef = useRef(true);
@@ -77,14 +76,13 @@ function Home() {
     }
   }, []);
 
-  // Fetch first page
   useEffect(() => {
     if (user) {
       getFeed();
     }
   }, [user, getFeed]);
 
-  // Dynamic Callback Ref Infinite Scroll logic
+
   const observerRef = useRef();
   const lastPostElementRef = useCallback(
     (node) => {
@@ -155,10 +153,7 @@ function Home() {
 
   return (
     <>
-      {/* 
-        This is your layout container. By keeping everything inside it,
-        HTML handles elements sequentially from top to bottom.
-      */}
+      
       <div className="mx-3 w-full">
         {posts.map((post, index) => {
           const hasUpVoted = user && post.upVotes.includes(user._id);
@@ -222,7 +217,7 @@ function Home() {
           );
         })}
 
-        {/* MOVED INSIDE: This keeps it at the structural bottom of your column */}
+    
         {loading && (
           <div className="text-center my-6 text-neutral-400 w-full block">
             Getting posts...
