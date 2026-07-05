@@ -3,20 +3,44 @@ import postModel from "../models/postModel.js"
 import subRedditModel from "../models/subRedditModel.js";
 import userModel from "../models/userModel.js";
 import commentModel from "../models/commentModel.js";
+import cloudinary from "../config/cloudinary.js";
 
 export async function createPost(req,res) {
     try {
         const {title,content,subredditId} = req.body
         const loggedId = req.user.id
+        let result = null;
+        if(req.file){
+
+            result = await new Promise((resolve,reject) => {
+                                const stream = cloudinary.uploader.upload_stream(
+                                    {
+                                        folder: "subreddit-picture"
+                                    },
+                                    (error,result) => {
+                                        if(error) return reject(error)
+                                        resolve(result)
+                                    }
+            
+                                );
+                                stream.end(req.file.buffer);
+            
+                            })
+        }
+        console.log(result)
         const post = await postModel.create({
             title,
             creator : loggedId,
             content,
+            image: {
+                url: result?.secure_url || "",
+                public_id: result?.public_id || ""
+            },
             upVotes: [],
             downVotes: [],
             subreddit: subredditId
         })
-
+        console.log(post)
         res.status(201).json(post)
     } catch (error) {
         console.error(error)

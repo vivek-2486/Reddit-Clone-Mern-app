@@ -5,23 +5,42 @@ import {useAuth} from '../context/AuthContext'
 import { useNavigate } from 'react-router'
 import DropDown from './DropDown'
 
-
 function Navbar() {
   const nav = useNavigate()
   const [searchQuery,setSearchQuery] = useState("")
   const handleSearch = () =>{
+    setSearchQuery("")
     nav(`/search?q=${searchQuery}`)
+    
   }
   const {user} = useAuth()
   return (
-    <div className='flex gap-2 justify-around items-center bg-[#ff4705] p-1 fixed w-full top-0 left-0 right-0 h-16 z-50'>
-      <div><img src={icon} className='h-10 w-12'></img></div>
-      <div className='flex gap-1 items-center'>
-        <input className="p-2 text-white m-1 rounded-2xl border border-neutral-600" placeholder='Search here' type='text' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}></input>
-        <button onClick={handleSearch}><Search/></button>
-      </div>
-      <div><DropDown/></div>
+<div className='flex justify-between items-center bg-[#ff4705] px-6 fixed w-full top-0 left-0 right-0 h-16 z-50 shadow-sm select-none'>
+
+    <div className='flex items-center'>
+        <img src={icon} alt="Logo" className='h-10 w-auto object-contain' />
     </div>
+
+    <div className='flex items-center bg-white/20 hover:bg-white/25 transition-colors rounded-full px-3 py-1.5 w-full max-w-md mx-4 group'>
+        <input 
+            className="w-full bg-transparent text-white placeholder-white/70 outline-none text-sm pr-2" 
+            placeholder='Search here...' 
+            type='text' 
+            value={searchQuery} 
+            onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button 
+            className="text-white hover:scale-105 active:scale-95 transition-transform cursor-pointer flex items-center justify-center" 
+            onClick={handleSearch}
+        >
+            <Search size={18} />
+        </button>
+    </div>
+
+    <div className='flex items-center'>
+        <DropDown />
+    </div>
+</div>
   )
 }
 

@@ -23,7 +23,16 @@ const postSchema = new mongoose.Schema(
       ref: "subreddit",
       required: true,
     },
-
+    image: {
+        url: {
+            type: String,
+            default: ""
+        },
+        public_id: {
+            type: String,
+            default: ""
+        }
+    },
     upVotes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -38,6 +47,7 @@ const postSchema = new mongoose.Schema(
       },
     ],
   },
+
   {
     timestamps: true,
   }

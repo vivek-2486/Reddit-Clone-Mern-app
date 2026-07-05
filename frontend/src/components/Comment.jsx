@@ -38,46 +38,49 @@ function Comment({ comment, handleCommentAdded, post }) {
   }
 
   return (
-    <div className="ml-4 mt-4 border-l border-gray-300 pl-4">
+    <div className="ml-6 mt-5 border-l-2 border-orange-200 pl-5">
       {/* Comment */}
-      <div className="flex flex-col gap-2">
-        <p>{comment.description}</p>
+      <div className="rounded-lg bg-orange-50 p-4">
+        <p className="whitespace-pre-wrap text-gray-700">
+          {comment.description}
+        </p>
 
         <button
-          className="w-fit text-blue-600 hover:underline"
-          onClick={() => setIsReply(prev => !prev)}
+          className="mt-3 text-sm font-medium text-orange-600 transition hover:text-orange-700 hover:underline"
+          onClick={() => setIsReply((prev) => !prev)}
         >
-          Reply
+          {isReply ? "Cancel" : "Reply"}
         </button>
       </div>
 
       {/* Reply Form */}
       {isReply && (
         <form
-          className="mt-2 flex flex-col gap-2"
           onSubmit={(e) => addComment(e, comment._id)}
+          className="mt-4 flex flex-col gap-3"
         >
           <textarea
             name="desc"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Enter your reply"
-            className="border rounded p-2"
+            placeholder="Write a reply..."
+            rows={3}
+            className="w-full rounded-lg border border-gray-300 bg-white p-3 text-gray-800 placeholder-gray-400 resize-none focus:border-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-200"
           />
 
           <button
             type="submit"
-            className="w-fit rounded bg-blue-500 px-3 py-1 text-white"
+            className="w-fit rounded-lg bg-orange-500 px-4 py-2 text-white transition hover:bg-orange-600"
           >
-            Submit
+            Reply
           </button>
         </form>
       )}
 
       {/* Replies */}
       {comment.replies?.length > 0 && (
-        <div className="mt-3">
-          {comment.replies.map(reply => (
+        <div className="mt-4 space-y-3">
+          {comment.replies.map((reply) => (
             <Comment
               key={reply._id}
               comment={reply}

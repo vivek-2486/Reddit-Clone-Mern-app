@@ -27,8 +27,9 @@ function ShowCommunity() {
     }
   }, [subId]);
   const [about, setAbout] = useState("")
-
+  const [image, setImage] = useState(null)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [date,setDate] = useState("")
 
   const getCommunity = async () => {
     try {
@@ -44,8 +45,8 @@ function ShowCommunity() {
         setIsAdmin(true)
       }
       else setIsAdmin(false)
-
-
+      setDate(new Date(comm.data.createdAt).toLocaleDateString())
+      setImage(comm.data.image.url)
       setSubId(comm.data._id)
       const isMember = comm.data.followers.includes(user._id)
       setJoin(isMember)
@@ -167,83 +168,189 @@ function ShowCommunity() {
     }
   }
   return (
-    <div className='w-full m-3.5'>
-      <header className='flex justify-between m-2 p-2 items-center'>
-        <div className='flex gap-3'>
-          <img src={logo} className='h-12 w-12 rounded-full' />
-          <span className='text-5xl'>r/ {name}</span>
+  <div className="w-full min-h-screen bg-orange-50 p-6">
+    <div className="max-w-5xl mx-auto rounded-xl border border-orange-200 bg-white shadow-sm overflow-hidden">
+
+      {/* ================= Header ================= */}
+      <div className="p-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+
+          <div className="flex items-center gap-5">
+            <img
+              src={image}
+              alt={name}
+              className="h-20 w-20 rounded-full border-2 border-orange-300 object-cover"
+            />
+
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">
+                r/{name}
+              </h1>
+
+              <p className="mt-1 text-gray-500">
+                {followers} members
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+
+            {isAdmin && (
+              <button
+                onClick={handleDelete}
+                className="rounded-lg border border-red-300 px-4 py-2 text-red-600 hover:bg-red-50 transition"
+              >
+                Delete Community
+              </button>
+            )}
+
+            <button
+              onClick={handleJoin}
+              className={`rounded-lg px-5 py-2 font-medium transition ${
+                join
+                  ? "border border-orange-300 bg-orange-100 text-orange-700"
+                  : "bg-orange-500 text-white hover:bg-orange-600"
+              }`}
+            >
+              {join ? "Joined" : "Join"}
+            </button>
+
+            <Modal communityId={subId} fetchPost={fetchPost} />
+
+          </div>
         </div>
-        <div>
-          {isAdmin && <button className='border border-neutral-600 rounded-2xl p-2 m-2' onClick={handleDelete}>Delete Community</button>}
-          <button className='border border-neutral-600 rounded-2xl p-2 m-2' onClick={handleJoin}>{join ? <span>Joined</span> : <span>Join</span>}</button>
-          <Modal communityId={subId} fetchPost={fetchPost} />
-          <span>Followers : </span>
-          <span>{followers}</span>
+
+        {/* About */}
+        <div className="mt-8 border-t border-gray-200 pt-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            About
+          </h2>
+
+          <p className="text-gray-600 leading-7">
+            Created On: {date}<br/>
+            {about}
+          </p>
         </div>
-      </header>
-      <hr />
-      <div>
-        <span className='text-3xl'>About</span>
-        <div>this is a about section {about}</div>
       </div>
-      <hr />
-      <div>
+
+      {/* ================= Posts ================= */}
+
+      <div className="border-t border-gray-200 bg-white p-6">
+
+        <h2 className="mb-6 text-2xl font-bold text-gray-900">
+          Posts
+        </h2>
+
         {posts.length === 0 ? (
-          <div className="text-center text-neutral-500 mt-6">
+          <div className="rounded-lg border border-dashed border-orange-300 bg-white p-10 text-center text-gray-500">
             No Posts Yet!
           </div>
         ) : (
           posts.map((post) => {
             const hasUpVoted = post.upVotes.includes(user._id);
-            const hasDownVoted = post.downVotes.includes(user._id); return (
+            const hasDownVoted = post.downVotes.includes(user._id);
+
+            return (
               <div
                 key={post._id}
-                className="border border-neutral-700 rounded-lg p-4 my-4 bg-green-900"
                 onClick={() => nav(`/p/${post._id}`)}
+                className="mb-5 cursor-pointer rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md hover:border-orange-300"
               >
                 {/* Header */}
-                <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-xl font-semibold">{post.title}</h2>
-                  <span className="text-sm text-neutral-400">
-                    {new Date(post.createdAt).toLocaleString()}
-                  </span>
-                  <span>Posted by: {post.creator.username}</span>
+                <div className="mb-4 flex justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {post.title}
+                    </h3>
+
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                      <span>
+                        Posted by{" "}
+                        <span className="font-medium text-gray-700">
+                          {post.creator.username}
+                        </span>
+                      </span>
+
+                      <span>•</span>
+
+                      <span>
+                        {new Date(post.createdAt).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {(isAdmin || post.creator._id === user._id) && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deletePost(post._id);
+                      }}
+                      className="rounded-md p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 transition"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  )}
                 </div>
 
                 {/* Content */}
-                <p className="text-neutral-200 whitespace-pre-wrap mb-4">
+                <p className="mb-4 whitespace-pre-wrap leading-7 text-gray-700">
                   {post.content}
                 </p>
 
-                <hr className="border-neutral-700 mb-3" />
+                {post.image?.url && (
+                  <img
+                    src={post.image.url}
+                    alt="post"
+                    className="mb-5 max-h-[450px] w-full rounded-lg border border-gray-200 object-cover"
+                  />
+                )}
 
-                {/* Actions */}
-                <div className="flex gap-6 items-center">
+                {/* Footer */}
+                <div className="flex gap-2 border-t border-gray-200 pt-3">
 
-                  <button className={`transition ${hasUpVoted && hasUpVoted ? "text-orange-500" : "hover:text-orange-500"
-                    } `} onClick={(e) => {e.stopPropagation(); handleUpVote(post._id)}}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpVote(post._id);
+                    }}
+                    className={`rounded-lg px-3 py-2 transition ${
+                      hasUpVoted
+                        ? "bg-orange-100 text-orange-600"
+                        : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
+                    }`}
+                  >
                     ⬆ {post.upVotes.length}
                   </button>
 
-                  <button className={`transition ${hasDownVoted && hasDownVoted ? "text-blue-500" : "hover:text-blue-500"
-                    }`} onClick={(e) => {e.stopPropagation(); handleDownVote(post._id)}}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDownVote(post._id);
+                    }}
+                    className={`rounded-lg px-3 py-2 transition ${
+                      hasDownVoted
+                        ? "bg-blue-100 text-blue-600"
+                        : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                    }`}
+                  >
                     ⬇ {post.downVotes.length}
                   </button>
 
-                  <button className="hover:text-green-500 transition">
+                  <button className="rounded-lg px-3 py-2 text-gray-600 hover:bg-green-50 hover:text-green-600 transition">
                     💬 Comments
                   </button>
-                  {(isAdmin || (post.creator._id === user._id)) && <button className='bg-red-500' onClick={() => deletePost(post._id)}><Trash2 /></button>}
+
                 </div>
               </div>
-            )
+            );
           })
         )}
+
       </div>
-      <hr />
-      this is a community {name}
+
     </div>
-  )
+  </div>
+);
 }
 
 export default ShowCommunity

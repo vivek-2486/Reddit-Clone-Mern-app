@@ -88,10 +88,10 @@ function Layout() {
             </div>
             <div className='flex'>
                 <Sidebar onCommunityCreated={getYourCommunities} expanded= {expanded} setExpanded={setExpanded}
-                    yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} />))}
-                    followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} />))}
+                    yourCommunities={yourCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} image={comm.image?.url}/>))}
+                    followingCommunities={followingCommunities.map((comm, index) => (<SidebarItem key={comm._id} id={comm._id} name={comm.name} image={comm.image?.url}/>))}
                 />
-                <main className={` ${expanded? "ml-[250px]":"ml-[40px]"} pt-16 w-full`}>
+                <main className={` ${expanded? "ml-[260px]":"ml-[64px]"} pt-16 w-full`}>
                     <Outlet context={{ getFollowingCommunities, getYourCommunities }} />
                 </main>
             </div>

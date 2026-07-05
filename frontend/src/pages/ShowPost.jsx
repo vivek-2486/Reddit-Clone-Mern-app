@@ -3,8 +3,11 @@ import { useParams } from 'react-router'
 import axios from 'axios'
 import { useAuth } from '@/context/AuthContext'
 import CommentBox from '@/components/CommentBox'
+import { Trash2 } from 'lucide-react'
+import { useNavigate } from 'react-router'  
 
 function ShowPost() {
+  const nav = useNavigate()
   const { id } = useParams()
   const { user } = useAuth()
 
@@ -116,72 +119,108 @@ function ShowPost() {
       console.error(error)
     }
   }
+  const deletePost = async () => {
+    const confirmed = window.confirm("Delete this post?");
+    if (!confirmed) return;
+    const postID = post._id
+    try {
+      const url = `${serverUrl}api/post/${postID}/delete`
+      const token = localStorage.getItem('token')
+      const post = await axios.delete(url, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+      nav('/home')
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
-    <div className="max-w-3xl mx-auto p-5 font-sans">
+    <div className="max-w-3xl mx-auto px-4 py-8">
 
-      <header className="mb-5">
-        <h1 className="text-4xl font-bold mb-2.5 text-gray-900">
-          {post.title}
-        </h1>
+      {/* Post */}
+      <div className="rounded-xl border border-orange-200 bg-white p-6 shadow-sm">
 
-        <div className="text-gray-600 text-sm flex items-center gap-2">
-          <span>
-            By{" "}
-            <strong className="font-semibold text-gray-800">
-              {post.creator.username}
-            </strong>
-          </span>
+        {/* Header */}
+        <header className="mb-6">
+          <div className='flex justify-between'>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {post.title}
+            </h1>
+            <button onClick={deletePost}><Trash2/></button>
 
-          <span>•</span>
+          </div>
+          <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+            <span>
+              Posted by{" "}
+              <span className="font-semibold text-gray-700">
+                {post.creator.username}
+              </span>
+            </span>
 
-          <time>{post.date}</time>
+            <span>•</span>
+
+            <span className="text-gray-700 font-medium">
+              r/{post.subreddit.name}
+            </span>
+
+            <span>•</span>
+
+            <time>{new Date(post.createdAt).toLocaleDateString()}</time>
+          </div>
+        </header>
+
+        {/* Content */}
+        <article className="whitespace-pre-wrap leading-8 text-gray-700">
+          {post.content}
+        </article>
+
+        {/* Image */}
+        {post.image?.url && (
+          <img
+            src={post.image.url}
+            alt="post"
+            className="mt-6 max-h-[500px] w-full rounded-xl border border-gray-200 object-cover"
+          />
+        )}
+
+        {/* Actions */}
+        <div className="mt-6 flex items-center gap-3 border-t border-gray-200 pt-4">
+
+          <button
+            className={`rounded-lg px-4 py-2 font-medium transition ${hasUpVoted
+                ? "bg-orange-100 text-orange-600"
+                : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
+              }`}
+            onClick={() => handleUpVote(post._id)}
+          >
+            ⬆ {post.upVotes.length}
+          </button>
+
+          <button
+            className={`rounded-lg px-4 py-2 font-medium transition ${hasDownVoted
+                ? "bg-blue-100 text-blue-600"
+                : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+              }`}
+            onClick={() => handleDownVote(post._id)}
+          >
+            ⬇ {post.downVotes.length}
+          </button>
+
         </div>
-
-        <div>Posted in r/{post.subreddit.name}</div>
-      </header>
-
-      <hr className="border-t border-gray-300 mb-5" />
-
-      <article className="leading-relaxed text-lg text-gray-800 mb-10">
-        <p>{post.content}</p>
-      </article>
-
-      <hr className="border-t border-gray-300 mb-5" />
-
-      <div>
-        <button
-          className={`transition ${
-            hasUpVoted
-              ? "text-orange-500"
-              : "hover:text-orange-500"
-          }`}
-          onClick={() => handleUpVote(post._id)}
-        >
-          ⬆ {post.upVotes.length}
-        </button>
-
-        <button
-          className={`transition ${
-            hasDownVoted
-              ? "text-blue-500"
-              : "hover:text-blue-500"
-          }`}
-          onClick={() => handleDownVote(post._id)}
-        >
-          ⬇ {post.downVotes.length}
-        </button>
       </div>
 
-      <div className="comments-section bg-gray-50 p-5 rounded-lg">
+
+
         <CommentBox
           comments={comments}
           setComments={setComments}
           post={post._id}
         />
       </div>
-
-    </div>
   )
 }
 

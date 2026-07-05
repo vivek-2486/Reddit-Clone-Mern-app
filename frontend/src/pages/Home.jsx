@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router";
+import { Trash2 } from "lucide-react";
 
 function Home() {
   const nav = useNavigate();
@@ -153,8 +154,8 @@ function Home() {
 
   return (
     <>
-      
-      <div className="mx-3 w-full">
+
+      <div className="max-w-3xl mx-auto px-4">
         {posts.map((post, index) => {
           const hasUpVoted = user && post.upVotes.includes(user._id);
           const hasDownVoted = user && post.downVotes.includes(user._id);
@@ -163,61 +164,86 @@ function Home() {
           return (
             <div
               key={post._id}
-              ref={isLastElement ? lastPostElementRef : null}
-              className="border border-neutral-700 rounded-lg p-4 my-4 bg-green-900 cursor-pointer"
               onClick={() => nav(`/p/${post._id}`)}
+              className="my-5 cursor-pointer rounded-xl border border-orange-200 bg-white p-5 shadow-sm transition-all hover:border-orange-300 hover:shadow-lg hover:-translate-y-0.5"
             >
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-xl font-semibold">{post.title}</h2>
-                <span className="text-sm text-neutral-400">
-                  {new Date(post.createdAt).toLocaleString()}
-                </span>
-                <span>Posted by: {post.creator.username}</span>
+              {/* Header */}
+              <div className="mb-4 flex items-start justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">
+                    {post.title}
+                  </h2>
+
+                  <div className="mt-1 flex items-center gap-3 text-sm text-gray-500">
+                    <span>
+                      Posted by{" "}
+                      <span className="font-medium text-gray-700">
+                        {post.creator.username}
+                      </span>
+                    </span>
+
+                    <span>•</span>
+
+                    <span>{new Date(post.createdAt).toLocaleString()}</span>
+                  </div>
+                </div>
+
+            
               </div>
 
-              <p className="text-neutral-200 whitespace-pre-wrap mb-4">
+              {/* Content */}
+              <p className="mb-4 whitespace-pre-wrap leading-7 text-gray-700">
                 {post.content}
               </p>
 
-              <hr className="border-neutral-700 mb-3" />
+              {post.image?.url && (
+                <img
+                  src={post.image.url}
+                  alt="post"
+                  className="mb-5 max-h-[450px] w-full rounded-lg border border-gray-200 object-cover"
+                />
+              )}
 
-              <div className="flex gap-6 items-center">
-                <button
-                  className={`transition ${
-                    hasUpVoted ? "text-orange-500" : "hover:text-orange-500"
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleUpVote(post._id);
-                  }}
-                >
-                  ⬆ {post.upVotes.length}
-                </button>
+              <div className="border-t border-gray-200 pt-3">
+                <div className="flex items-center gap-2">
 
-                <button
-                  className={`transition ${
-                    hasDownVoted ? "text-blue-500" : "hover:text-blue-500"
-                  }`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownVote(post._id);
-                  }}
-                >
-                  ⬇ {post.downVotes.length}
-                </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUpVote(post._id);
+                    }}
+                    className={`flex items-center gap-1 rounded-lg px-3 py-2 transition ${hasUpVoted
+                        ? "bg-orange-100 text-orange-600"
+                        : "text-gray-600 hover:bg-orange-50 hover:text-orange-600"
+                      }`}
+                  >
+                    ⬆ {post.upVotes.length}
+                  </button>
 
-                <button
-                  className="hover:text-green-500 transition"
-                 
-                 >
-                  💬 Comments
-                </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDownVote(post._id);
+                    }}
+                    className={`flex items-center gap-1 rounded-lg px-3 py-2 transition ${hasDownVoted
+                        ? "bg-blue-100 text-blue-600"
+                        : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                      }`}
+                  >
+                    ⬇ {post.downVotes.length}
+                  </button>
+
+                  <button className="rounded-lg px-3 py-2 text-gray-600 transition hover:bg-green-50 hover:text-green-600">
+                    💬 Comments
+                  </button>
+
+                </div>
               </div>
             </div>
           );
         })}
 
-    
+
         {loading && (
           <div className="text-center my-6 text-neutral-400 w-full block">
             Getting posts...

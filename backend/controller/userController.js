@@ -3,7 +3,7 @@ import userModal from "../models/userModel.js";
 import bcyptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import config from "../util/config.js";
-
+import cloudinary from "../config/cloudinary.js";
 
 export async function addUser(req,res){
     try {
@@ -93,5 +93,46 @@ export async function login(req,res){
 
     } catch (error) {
         return res.status(500).json({ message: "Server error", error: error.message });
+    }
+}
+
+export async function addProfilePicture(req,res) {
+    try {
+        const loggedId = req.user.id
+        const pic = req.file
+        const user = await userModal.findById(loggedId)
+        if(!user){
+            res.status(404).json({message: "user not found"})
+        }
+        if(user.profilePicture?.public_id){
+            await cloudinary.uploader.destroy(user.profilePicture.public_id)
+        }
+
+        const result = await new Promise((resolve,reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                {
+                    folder: "profile-picture"
+                },
+                (error,result) => {
+                    if(error) return reject(error)
+                    resolve(result)
+                }
+                
+            );
+            stream.end(req.file.buffer);
+
+        })
+
+        user.profilePicture = {
+            url: result.secure_url,
+            public_id: result.public_id
+        }
+
+        await user.save()
+        console.log(user)
+        res.status(200).json(user);
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Error from server during adding profile picutre"})
     }
 }

@@ -40,6 +40,7 @@ export default function SearchResult() {
 
       setCommunities(data.data.communities || []);
       setPosts(data.data.post || []);
+    
     } catch (error) {
       console.error(error);
     } finally {
@@ -105,10 +106,10 @@ export default function SearchResult() {
               {posts.length === 0 ? <p className='text-gray-500'>No posts found.</p> : (
                 posts.map((post) => (
                   <Link to={`/p/${post._id}`} key={post._id} className="p-4 border rounded-xl block bg-white shadow-xs">
-                    <div className='flex justify-between'>
-                      <h3 className='font-bold text-xl text-blue-600'>{post.title}</h3>
-                      <div>posted by {post.creator.username}</div>
-                      <div>Posted on r/{post.subreddit.name}</div>
+                    <div className='flex space-x-4 items-center'>
+                      <h3 className='font-bold text-2xl text-blue-600'>{post.title}</h3>
+                      <div className='text-[13px]'>Posted by : {post.creator.username}</div>
+                      <div className='text-[13px]'>Posted on : r/{post.subreddit.name}</div>
                     </div>
                     <p className='text-sm text-gray-700 mt-1'>{post.content}</p>
                   </Link>

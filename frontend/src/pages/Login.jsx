@@ -39,15 +39,15 @@ function Login() {
         
     }
   return (
- <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 bg-yellow-50">
+ <div className="flex min-h-[80vh] items-center justify-center bg-orange-50 px-4">
 
-  <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg border border-yellow-200">
+  <div className="w-full max-w-md rounded-2xl border border-orange-200 bg-white p-8 shadow-md">
 
-    <h2 className="text-3xl font-bold text-center text-yellow-900 mb-2">
+    <h2 className="mb-2 text-center text-3xl font-bold text-gray-900">
       Login
     </h2>
 
-    <p className="text-center text-yellow-700 mb-6">
+    <p className="mb-6 text-center text-gray-500">
       Welcome back 👋
     </p>
 
@@ -59,7 +59,7 @@ function Login() {
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full p-3 border border-yellow-300 rounded-xl outline-none focus:ring-2 focus:ring-yellow-400"
+        className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
       />
 
       <input
@@ -68,23 +68,24 @@ function Login() {
         placeholder="Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="w-full p-3 border border-yellow-300 rounded-xl outline-none focus:ring-2 focus:ring-yellow-400"
+        className="w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-200"
       />
 
       <button
         type="submit"
-        className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold p-3 rounded-xl transition"
+        className="w-full rounded-lg bg-orange-500 p-3 font-semibold text-white transition hover:bg-orange-600"
       >
         Login
       </button>
 
     </form>
 
-    <div className="text-center mt-6 text-sm text-yellow-800">
+    <div className="mt-6 text-center text-sm text-gray-600">
       <span>Don't have an account? </span>
+
       <button
-        onClick={() => navigate('/signup')}
-        className="font-semibold underline hover:text-yellow-600"
+        onClick={() => navigate("/signup")}
+        className="font-semibold text-orange-600 transition hover:text-orange-700 hover:underline"
       >
         Sign Up
       </button>

@@ -9,6 +9,7 @@ import Layout from './pages/Layout'
 import ShowCommunity from './pages/ShowCommunity'
 import SearchResult from './pages/SearchResult'
 import ShowPost from './pages/ShowPost'
+import Profile from './pages/Profile'
 
 function App() {
 
@@ -43,8 +44,11 @@ function App() {
         {
           path: '/search',
           element: <SearchResult/>
+        },
+        {
+          path: '/profile/:id',
+          element: <Profile/>
         }
-
       ]
     }
   ])

@@ -16,7 +16,18 @@ const subRedditSchema =new mongoose.Schema({
     description:{
         type: String,
         required: true
+    },
+    image: {
+        url: {
+            type: String,
+            default: ""
+        },
+        public_id: {
+            type: String,
+            default: ""
+        }
     }
+
 },{
     timestamps: true
 })

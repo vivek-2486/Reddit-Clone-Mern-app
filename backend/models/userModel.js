@@ -17,7 +17,17 @@ const userSchema =new mongoose.Schema({
     joinedSub: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'subreddit'
-    }]
+    }],
+    profilePicture: {
+        url: {
+            type: String,
+            default: ""
+        },
+        public_id: {
+            type: String,
+            default: ""
+        }
+    }
 },{
     timestamps: true
 })
