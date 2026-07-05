@@ -11,7 +11,7 @@ import { BadgePlus } from "lucide-react"
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-export default function Modal({ expanded, onCommunityCreated }) {
+export default function Modal({ expanded, setExpanded, onCommunityCreated }) {
     const [open, setOpen] = useState(false)
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
@@ -43,16 +43,24 @@ export default function Modal({ expanded, onCommunityCreated }) {
             setOpen(!open)
         }
     }
+    const handleOpen = () => {
+    setExpanded(false);
+
+    setTimeout(() => {
+        setOpen(true);
+    }, 250); 
+}
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-                <button className="cursor-pointer m-1 flex justify-between gap-1 items-center my-2 text-gray-700 hover:text-orange-600 transition">
-                    <div className={`${expanded ? "mr-2" : "w-0 overflow-hidden"}`}>
-                        Create Community
-                    </div>
-                    <BadgePlus />
-                </button>
-            </DialogTrigger>
+            <button
+                onClick={handleOpen}
+                className="cursor-pointer m-1 flex justify-between gap-1 items-center my-2 text-gray-700 hover:text-orange-600 transition"
+            >
+                <div className={`${expanded ? "mr-2" : "w-0 overflow-hidden"}`}>
+                    Create Community
+                </div>
+                <BadgePlus />
+            </button>
 
             <DialogContent className="border border-orange-200 bg-white">
                 <DialogHeader>

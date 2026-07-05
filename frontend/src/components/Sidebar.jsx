@@ -25,7 +25,7 @@ function Sidebar({yourCommunities ,followingCommunities, onCommunityCreated,expa
             </button>
         </div>
 
-        <Modal expanded={expanded} onCommunityCreated={onCommunityCreated}/>
+        <Modal expanded={expanded} setExpanded={setExpanded} onCommunityCreated={onCommunityCreated} />
         
         <hr className="border-orange-100/70 my-3"/>
 
