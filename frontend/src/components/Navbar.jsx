@@ -27,6 +27,9 @@ function Navbar() {
             placeholder='Search here...' 
             type='text' 
             value={searchQuery} 
+            onKeyDown={(e) =>{ if(e.key === 'Enter'){
+                handleSearch()
+            }}}
             onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button 

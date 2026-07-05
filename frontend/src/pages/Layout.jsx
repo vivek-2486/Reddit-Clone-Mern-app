@@ -79,7 +79,7 @@ function Layout() {
         getFollowingCommunities()
     }, [])
 
-    const [expanded, setExpanded] = useState(true)
+    const [expanded, setExpanded] = useState(() => window.innerWidth >= 768)
     return (
         <div className = "">
             <div className=''>
