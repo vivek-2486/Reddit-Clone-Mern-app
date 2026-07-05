@@ -163,6 +163,7 @@ function Home() {
 
           return (
             <div
+              ref={isLastElement ? lastPostElementRef : null}
               key={post._id}
               onClick={() => nav(`/p/${post._id}`)}
               className="my-5 cursor-pointer rounded-xl border border-orange-200 bg-white p-5 shadow-sm transition-all hover:border-orange-300 hover:shadow-lg hover:-translate-y-0.5"
