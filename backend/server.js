@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 connectDb();
 
 
-const frontEnd = process.env.VITE_URl || "http://localhost:5173"
+const frontEnd = process.env.CLIENT_URL || "http://localhost:5173";
 
 
 app.use(express.json())
