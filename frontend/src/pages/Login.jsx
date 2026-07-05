@@ -8,9 +8,10 @@ function Login() {
     const[password,setPassword] = useState('');
     const server = `${import.meta.env.VITE_SERVER_URL}api/user/login`;
 
+    const [loading, setLoading] = useState(false)
     const handleSubmit = async(e) => {
         e.preventDefault()
-
+        setLoading(true)
         const requ = {
           email,
           password
@@ -21,20 +22,20 @@ function Login() {
           console.log(response.data.user.name)
           localStorage.setItem('username',response.data.user.name)
           localStorage.setItem('email',response.data.user.email)
-          console.log(localStorage.getItem('username'));
-          console.log(localStorage.getItem('token'))
-          console.log(response);
+
           navigate('/home');
         } catch (error) {
           if (error.response) {
-            // The backend responded with an error status code (like 401 or 400)
+            
             console.error("Login failed:", error.response.data.message);
-            alert(error.response.data.message); // Displays "Invalid email or password" to the user
+            alert(error.response.data.message); 
         } else {
-            // Something went wrong setting up the request (like the backend server being offline)
+            
             console.error("Network error:", error.message);
             alert("Could not connect to the server. Please try again later.");
         }
+        } finally{
+          setLoading(false)
         }
         
     }
@@ -89,6 +90,7 @@ function Login() {
       >
         Sign Up
       </button>
+      {loading && <div className="text-center">Logging you in...</div>}
     </div>
 
   </div>

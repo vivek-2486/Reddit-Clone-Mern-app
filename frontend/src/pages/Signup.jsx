@@ -6,11 +6,13 @@ function Signup() {
     const navigate = useNavigate()
     const[name,setName] = useState('');
     const [email, setEmail] = useState('')
+        const [loading, setLoading] = useState(false)
+
     const[password,setPassword] = useState('');
     const server = `${import.meta.env.VITE_SERVER_URL}api/user`;
     const handleSubmit = async(e) => {
         e.preventDefault()
-
+        setLoading(true)
         const requ = {
           username: name,
           email,
@@ -20,8 +22,8 @@ function Signup() {
          localStorage.setItem('token',response.data.token)
          localStorage.setItem('username',response.data.user.name)
          localStorage.setItem('email',response.data.user.email)
-         console.log(localStorage.getItem('token'))
-         console.log(response);
+    
+         setLoading(false)
          navigate('/home');
     }
   return (
@@ -85,7 +87,7 @@ function Signup() {
         Login
       </button>
     </div>
-
+    {loading && <div className="text-center">Logging you in...</div>}
   </div>
 
 </div>
