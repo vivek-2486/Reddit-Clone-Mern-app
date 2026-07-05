@@ -150,7 +150,7 @@ function ShowPost() {
             <h1 className="text-3xl font-bold text-gray-900">
               {post.title}
             </h1>
-            <button onClick={deletePost}><Trash2/></button>
+          {user?._id === post.creator._id.toString() && <button onClick={deletePost}><Trash2/></button>}
 
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-gray-500">
