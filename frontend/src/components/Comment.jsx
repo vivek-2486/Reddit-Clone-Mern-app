@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useAuth } from '@/context/AuthContext'
 
 function Comment({ comment, handleCommentAdded, post }) {
+  const {user} = useAuth()
   const [isReply, setIsReply] = useState(false)
   const [description, setDescription] = useState("")
 
@@ -41,10 +43,11 @@ function Comment({ comment, handleCommentAdded, post }) {
     <div className="ml-6 mt-5 border-l-2 border-orange-200 pl-5">
       {/* Comment */}
       <div className="rounded-lg bg-orange-50 p-4">
-        <p className="whitespace-pre-wrap text-gray-700">
-          {comment.description}
-        </p>
-
+          <p className="whitespace-pre-wrap text-gray-700">
+            {comment.description}
+          </p>
+          <hr className='py-1'/>
+          <div className=''>By: {comment.creator.username}</div>
         <button
           className="mt-3 text-sm font-medium text-orange-600 transition hover:text-orange-700 hover:underline"
           onClick={() => setIsReply((prev) => !prev)}
