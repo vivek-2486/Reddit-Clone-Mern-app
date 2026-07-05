@@ -4,7 +4,7 @@ import Comment from './Comment'
 
 function CommentBox({ comments, setComments, post }) {
   const [description, setDescription] = useState("")
-  const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
   const addReply = (tree, parent, comment) => {
     return tree.map((item) => {

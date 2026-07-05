@@ -7,7 +7,7 @@ function Signup() {
     const[name,setName] = useState('');
     const [email, setEmail] = useState('')
     const[password,setPassword] = useState('');
-    const server = `${import.meta.env.VITE_API_URL}api/user`;
+    const server = `${import.meta.env.VITE_SERVER_URL}api/user`;
     const handleSubmit = async(e) => {
         e.preventDefault()
 

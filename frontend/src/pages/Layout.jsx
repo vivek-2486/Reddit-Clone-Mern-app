@@ -10,7 +10,7 @@ import { useAuth } from '@/context/AuthContext'
 
 
 function Layout() {
-    const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
     const { user, setUser } = useAuth()
     const nav = useNavigate()

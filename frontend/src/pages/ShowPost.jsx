@@ -14,7 +14,7 @@ function ShowPost() {
   const [post, setPost] = useState(null)
   const [comments, setComments] = useState([])
 
-  const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
   const getPost = async () => {
     try {

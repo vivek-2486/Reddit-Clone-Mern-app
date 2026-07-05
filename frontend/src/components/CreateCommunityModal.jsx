@@ -16,8 +16,9 @@ export default function Modal({ expanded, onCommunityCreated }) {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [picture, setPicture] = useState(null)
+    const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
-    const url = `http://localhost:3000/api/subreddit`
+    const url = `${serverUrl}api/subreddit`
     const handleSubmit = async (e) => {
         const formData = new FormData()
         e.preventDefault()

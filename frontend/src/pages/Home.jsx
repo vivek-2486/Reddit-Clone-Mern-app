@@ -6,7 +6,7 @@ import { Trash2 } from "lucide-react";
 
 function Home() {
   const nav = useNavigate();
-  const serverUrl = "http://localhost:3000/";
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
   const { user } = useAuth();
 
   const [yourCommunities, setYourCommunities] = useState([]);

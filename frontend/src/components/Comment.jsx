@@ -5,7 +5,7 @@ function Comment({ comment, handleCommentAdded, post }) {
   const [isReply, setIsReply] = useState(false)
   const [description, setDescription] = useState("")
 
-  const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
   const addComment = async (e, parentId) => {
     e.preventDefault()

@@ -19,7 +19,7 @@ export default function Modal({ communityId, fetchPost }) {
     const [addPicture, setAddPicture] = useState(false)
 
 
-    const serverUrl = `http://localhost:3000/`
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
     const handleSubmit = async (e) => {
         e.preventDefault()
         const formData = new FormData()

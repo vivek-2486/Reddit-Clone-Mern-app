@@ -12,7 +12,7 @@ function ShowCommunity() {
   const { name } = useParams();
   const nav = useNavigate()
   const { user } = useAuth()
-  const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
   const { getFollowingCommunities, getYourCommunities } = useOutletContext()
   const [subId, setSubId] = useState("")
   const [followers, setFollowers] = useState(0)

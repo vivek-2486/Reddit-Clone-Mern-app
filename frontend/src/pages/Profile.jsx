@@ -9,7 +9,7 @@ function Profile() {
     const [picture, setPicture] = useState(null)
     const [changePicture, setChangePicture] = useState(false)
     
-    const serverUrl = 'http://localhost:3000/'
+  const serverUrl = import.meta.env.VITE_SERVER_URL || "http://localhost:3000/";
 
     
     const handleSubmit = async() => {

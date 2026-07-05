@@ -6,7 +6,7 @@ function Login() {
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const[password,setPassword] = useState('');
-    const server = `${import.meta.env.VITE_API_URL}api/user/login`;
+    const server = `${import.meta.env.VITE_SERVER_URL}api/user/login`;
 
     const handleSubmit = async(e) => {
         e.preventDefault()
