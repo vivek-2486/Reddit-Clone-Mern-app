@@ -1,4 +1,4 @@
-# Reddit Clone (MERN)
+# Reddit Clone (MERN) // Vivek 
 
 A full-stack Reddit-inspired social platform built with the **MERN Stack** where users can create communities, share posts, engage in discussions through nested comments, vote on content, and discover posts with an infinite scrolling feed.
 
